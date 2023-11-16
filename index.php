@@ -1,99 +1,94 @@
 <?php
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $str = "Hello World";
+    echo stringtonumber($str,1);
+    
+    $str2 = "121212321321$%132 242132331321211";
+    echo numbertostring($str2,1);
 
-    $valid = $_POST["valid"];
+    function leftCircularPush($shiftAmount)
+    {
 
-    if ($valid == "stringtonum") {
-        $number = $_POST["input_number"];
+        $array = range('A', 'Z');
 
-        function leftCircularPush($shiftAmount)
-        {
-
-            $array = range('A', 'Z');
-
-            // Check if the shift amount is a valid numeric value
-            if (!is_numeric($shiftAmount)) {
-                echo "Invalid shift amount. Please enter a numeric value.";
-                return;
-            }
-
-            // Ensure the shift amount is positive
-            $shiftAmount = abs($shiftAmount);
-
-            // Calculate the effective shift amount (to handle circular shifting)
-            $shiftAmount = $shiftAmount % count($array);
-
-            // Perform left circular push
-            $slicedArray = array_slice($array, 0, $shiftAmount);
-            $remainingArray = array_slice($array, $shiftAmount);
-            $array = array_merge($remainingArray, $slicedArray);
-
-            return $array;
-
+        if (!is_numeric($shiftAmount)) {
+            echo "Invalid shift amount. Please enter a numeric value.";
+            return;
         }
 
-        function initiateArray($shiftAmount) 
-        {
+        $shiftAmount = abs($shiftAmount);
 
-            $matrix = array();
+        $shiftAmount = $shiftAmount % count($array);
 
-            for ($i = 0; $i < 5; $i++) {
-                for ($j = 0; $j < 3; $j++) {
-                    for ($k = 0; $k < 2; $k++) {
+        $slicedArray = array_slice($array, 0, $shiftAmount);
+        $remainingArray = array_slice($array, $shiftAmount);
+        $array = array_merge($remainingArray, $slicedArray);
+
+        return $array;
+
+    }
+
+    function initiateArray($shiftAmount) 
+    {
+
+        $matrix = array();
+
+        for ($i = 0; $i < 5; $i++) {
+            for ($j = 0; $j < 3; $j++) {
+                for ($k = 0; $k < 2; $k++) {
+                    $matrix[$i][$j][$k] = NULL;
+                }
+            }
+        }
+
+        $index = 0;
+        $letters = leftCircularPush($shiftAmount);
+
+        for ($i = 0; $i < 5; $i++) {
+            for ($j = 0; $j < 3; $j++) {
+                for ($k = 0; $k < 2; $k++) {
+                    if (($i == 4 && $j == 0 && $k == 0) || ($i == 4 && $j == 0 && $k == 1) || ($i == 4 && $j == 2 && $k == 0) || ($i == 4 && $j == 2 && $k == 1)) {
                         $matrix[$i][$j][$k] = NULL;
-                    }
-                }
-            }
-
-            $index = 0;
-            $letters = leftCircularPush($shiftAmount);
-
-            for ($i = 0; $i < 5; $i++) {
-                for ($j = 0; $j < 3; $j++) {
-                    for ($k = 0; $k < 2; $k++) {
-                        if (($i == 4 && $j == 0 && $k == 0) || ($i == 4 && $j == 0 && $k == 1) || ($i == 4 && $j == 2 && $k == 0) || ($i == 4 && $j == 2 && $k == 1)) {
-                            $matrix[$i][$j][$k] = NULL;
-                        } else {
-                            $matrix[$i][$j][$k] = $letters[$index];
-                            $index++;
-                        }
-                    }
-                }
-            }
-
-            return $matrix;
-
-        }
-
-        $resultArray = initiateArray($number);
-
-        function reverseTransformMatrix($matrix)
-        {
-            $newMatrix = [];
-
-            foreach ($matrix as $row) {
-                $newRow = [];
-                foreach ($row as $item) {
-                    if ($item[0] === null && $item[1] === null) {
-                        $newRow[] = null;
                     } else {
-                        $newRow[] = $item[0] . $item[1];
+                        $matrix[$i][$j][$k] = $letters[$index];
+                        $index++;
                     }
                 }
-                $newMatrix[] = $newRow;
             }
-
-            return $newMatrix;
         }
 
+        return $matrix;
 
-        $newMatrix = reverseTransformMatrix($resultArray);
+    }
+
+    function reverseTransformMatrix($matrix)
+    {
+        $newMatrix = [];
+
+        foreach ($matrix as $row) {
+            $newRow = [];
+            foreach ($row as $item) {
+                if ($item[0] === null && $item[1] === null) {
+                    $newRow[] = null;
+                } else {
+                    $newRow[] = $item[0] . $item[1];
+                }
+            }
+            $newMatrix[] = $newRow;
+        }
+
+        return $newMatrix;
+    }
+
+    function stringtonumber($str,$number){
+
+        $resultArrayString = initiateArray($number);
+
+        $newMatrix = reverseTransformMatrix($resultArrayString);
 
         $result = null;
 
-        $string = $_POST['input_string'];
-        $string = strtoupper($string);
+        $string = strtoupper($str);
         $sequence = str_split($string);
 
         function getNumericalValue($letter, $matrix) {
@@ -118,95 +113,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $result[] = $letter;
             }
         }
-    } elseif ($valid == "numtostring") {
-        $number = $_POST["input_number"];
-    
-        function leftCircularPush($shiftAmount)
-        {
+        return implode($result);
+   }
 
-            $array = range('A', 'Z');
-
-            // Check if the shift amount is a valid numeric value
-            if (!is_numeric($shiftAmount)) {
-                echo "Invalid shift amount. Please enter a numeric value.";
-                return;
-            }
-
-            // Ensure the shift amount is positive
-            $shiftAmount = abs($shiftAmount);
-
-            // Calculate the effective shift amount (to handle circular shifting)
-            $shiftAmount = $shiftAmount % count($array);
-
-            // Perform left circular push
-            $slicedArray = array_slice($array, 0, $shiftAmount);
-            $remainingArray = array_slice($array, $shiftAmount);
-            $array = array_merge($remainingArray, $slicedArray);
-
-            return $array;
-
-        }
-
-        function initiateArray($shiftAmount) 
-        {
-
-            $matrix = array();
-
-            for ($i = 0; $i < 5; $i++) {
-                for ($j = 0; $j < 3; $j++) {
-                    for ($k = 0; $k < 2; $k++) {
-                        $matrix[$i][$j][$k] = NULL;
-                    }
-                }
-            }
-
-            $index = 0;
-            $letters = leftCircularPush($shiftAmount);
-
-            for ($i = 0; $i < 5; $i++) {
-                for ($j = 0; $j < 3; $j++) {
-                    for ($k = 0; $k < 2; $k++) {
-                        if (($i == 4 && $j == 0 && $k == 0) || ($i == 4 && $j == 0 && $k == 1) || ($i == 4 && $j == 2 && $k == 0) || ($i == 4 && $j == 2 && $k == 1)) {
-                            $matrix[$i][$j][$k] = NULL;
-                        } else {
-                            $matrix[$i][$j][$k] = $letters[$index];
-                            $index++;
-                        }
-                    }
-                }
-            }
-
-            return $matrix;
-
-        }
+    function numbertostring($str2, $number){
 
         $resultArray = initiateArray($number);
 
-        function reverseTransformMatrix($matrix)
-        {
-            $newMatrix = [];
-
-            foreach ($matrix as $row) {
-                $newRow = [];
-                foreach ($row as $item) {
-                    if ($item[0] === null && $item[1] === null) {
-                        $newRow[] = null;
-                    } else {
-                        $newRow[] = $item[0] . $item[1];
-                    }
-                }
-                $newMatrix[] = $newRow;
-            }
-
-            return $newMatrix;
-        }
+        $Matrix = reverseTransformMatrix($resultArray);
 
 
-        $newMatrix = reverseTransformMatrix($resultArray);
-
-        // $result = null;
-
-        $numericalValues = $_POST['input_string'];
+        $numericalValues = $str2;
 
         function getLetterValue($numericalValue, $matrix) {
             $rowDigit = $numericalValue[0];
@@ -233,38 +150,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             $numericalChunk .= $numericalValues[$i];
             if (strlen($numericalChunk) == 3) {
-                $result[] = getLetterValue($numericalChunk, $newMatrix);
+                $result[] = getLetterValue($numericalChunk, $Matrix);
                 $numericalChunk = "";
             }
         }
+        return implode($result);
     }
 
-}
-$resultValue = !empty($result) ? implode($result) : '';
-
 ?>
-<div>
-    <form method="POST" action="">
-        <div>
-            <label for="valid">Select Condition</label>
-            <select style="width:200px; height: 30px; border-radius: 10px; margin: 0 15px;" id="valid" name="valid" required="">
-              <option value="">-- Please Select Condition --</option>
-              <option value="stringtonum">String to Number</option>
-              <option value="numtostring">Number to String</option>
-            </select>
-            <label for="input_string">Input String:</label>
-            <input style="width:400px; height: 30px; margin: 0 15px;" type="text" name="input_string" id="input_string" required>
-
-            <label for="input_string">Input Number (0~9):</label>
-            <input style="width:100px; height: 30px; margin: 0 15px;" type="Number" name="input_number" id="input_number" min="0" max="9" required>
-
-            <button type="submit">Convert</button>    
-        </div>      
-        <br><br>
-        <div>
-            <label for="result">Result:</label>
-            <input style="width:400px; height: 30px;" type="text" name="result" id="result" value="<?php echo $resultValue; ?>" readonly>    
-        </div>
-        
-    </form>
-</div>
