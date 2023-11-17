@@ -1,15 +1,15 @@
 <?php
 
     $str = "Hello World";
-    echo stringtonumber($str,1);
+    echo stringtonumber($str,0);
     
-    $str2 = "121212321321$%132 242132331321211";
-    echo numbertostring($str2,1);
+    $str2 = "111 111*111";
+    echo numbertostring($str2,0);
 
     function leftCircularPush($shiftAmount)
     {
-
-        $array = range('A', 'Z');
+        //initial array
+        $array = array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z');
 
         if (!is_numeric($shiftAmount)) {
             echo "Invalid shift amount. Please enter a numeric value.";
@@ -17,14 +17,12 @@
         }
 
         $shiftAmount = abs($shiftAmount);
-
         $shiftAmount = $shiftAmount % count($array);
-
         $slicedArray = array_slice($array, 0, $shiftAmount);
         $remainingArray = array_slice($array, $shiftAmount);
         $array = array_merge($remainingArray, $slicedArray);
-
         return $array;
+
 
     }
 
@@ -40,10 +38,10 @@
                 }
             }
         }
-
+       
         $index = 0;
         $letters = leftCircularPush($shiftAmount);
-
+        
         for ($i = 0; $i < 5; $i++) {
             for ($j = 0; $j < 3; $j++) {
                 for ($k = 0; $k < 2; $k++) {
@@ -56,9 +54,7 @@
                 }
             }
         }
-
         return $matrix;
-
     }
 
     function reverseTransformMatrix($matrix)
@@ -76,16 +72,14 @@
             }
             $newMatrix[] = $newRow;
         }
-
         return $newMatrix;
     }
 
     function stringtonumber($str,$number){
 
         $resultArrayString = initiateArray($number);
-
         $newMatrix = reverseTransformMatrix($resultArrayString);
-
+        
         $result = null;
 
         $string = strtoupper($str);
@@ -119,10 +113,7 @@
     function numbertostring($str2, $number){
 
         $resultArray = initiateArray($number);
-
         $Matrix = reverseTransformMatrix($resultArray);
-
-
         $numericalValues = $str2;
 
         function getLetterValue($numericalValue, $matrix) {
@@ -136,7 +127,6 @@
             if (isset($matrix[$rowIndex][$colIndex][$letterDigit - 1])) {
                 return $matrix[$rowIndex][$colIndex][$letterDigit - 1];
             }
-
             return null;
         }
 
