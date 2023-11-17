@@ -1,15 +1,22 @@
 <?php
 
-    $str = "Hello World";
-    echo stringtonumber($str,0);
-    
-    $str2 = "111 111*111";
-    echo numbertostring($str2,0);
+    $array = array('Z', 'B', 'C', 'D', 'X', 'N', 'G', 'R', 'I', 'J', 'K', 'L', 'M', 'F', 'O', 'P', 'Q', 'H', 'S', 'T', 'U', 'V', 'W', 'E', 'Y', 'A');
 
+    $str = "Hello World";
+    echo stringtonumber($str,2);
+    
+    $str2 = "232242222222131 241131312222112";
+    echo numbertostring($str2,2);
+    
+    function initializeGlobalVariable(){
+        global $array;
+
+        $origianlArray = $array;
+        return $origianlArray;
+    }
     function leftCircularPush($shiftAmount)
     {
-        //initial array
-        $array = array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z');
+        $new_array = initializeGlobalVariable();
 
         if (!is_numeric($shiftAmount)) {
             echo "Invalid shift amount. Please enter a numeric value.";
@@ -17,11 +24,12 @@
         }
 
         $shiftAmount = abs($shiftAmount);
-        $shiftAmount = $shiftAmount % count($array);
-        $slicedArray = array_slice($array, 0, $shiftAmount);
-        $remainingArray = array_slice($array, $shiftAmount);
-        $array = array_merge($remainingArray, $slicedArray);
-        return $array;
+        $shiftAmount = $shiftAmount % count($new_array);
+        $slicedArray = array_slice($new_array, 0, $shiftAmount);
+        $remainingArray = array_slice($new_array, $shiftAmount);
+        $new_array = array_merge($remainingArray, $slicedArray);
+
+        return $new_array;
 
 
     }
@@ -79,7 +87,7 @@
 
         $resultArrayString = initiateArray($number);
         $newMatrix = reverseTransformMatrix($resultArrayString);
-        
+
         $result = null;
 
         $string = strtoupper($str);
@@ -107,6 +115,7 @@
                 $result[] = $letter;
             }
         }
+
         return implode($result);
    }
 
